@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
         this.ref.detectChanges();
       },
       error: error => console.log(error),
-      complete: () => console.log(this.users)
+      complete: () => console.log("response", this.users)
     });
   }
 }
