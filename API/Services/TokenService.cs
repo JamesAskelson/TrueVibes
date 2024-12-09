@@ -14,6 +14,7 @@ public class TokenService(IConfiguration config) : ITokenService
     public string CreateToken(AppUser user)
     {
         var privateKey = config["TokenKey"] ?? throw new Exception("Cannont access tokenKey from appsettings");
+
         if(privateKey.Length < 64){
             throw new Exception("Your tokenKey needs to be longer");
         }
@@ -30,6 +31,7 @@ public class TokenService(IConfiguration config) : ITokenService
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = creds
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

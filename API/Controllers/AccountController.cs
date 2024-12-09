@@ -1,5 +1,6 @@
 
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using API.Data;
 using API.DTO;
@@ -9,15 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 public class AccountController(DataContext context, ITokenService tokenService) : BaseApiController
 {
     [HttpPost("register")]
 
-    public async Task<ActionResult<AppUser>> Register(RegisterDTO registerDTO)
+    public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
     {
-
         if (await UserExists(registerDTO.Username))
         {
             return BadRequest("Username is taken");
@@ -31,14 +29,19 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             PasswordSalt = hmac.Key
         };
 
+
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return user;
+        return new UserDTO
+        {
+            UserName = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> Login(LoginDTO loginDTO)
+    public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDTO.Username.ToLower());
 
@@ -56,7 +59,11 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             }
         }
 
-        return user;
+        return new UserDTO
+        {
+            UserName = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
     private async Task<bool> UserExists(string Username)
