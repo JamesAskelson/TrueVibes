@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <div class="text-center">
+    @if(!registerState){
+            <h1 class="cover-heading">Choose your Vibe</h1>
+            <p class="lead">Come on in and find your vibe with just a simple sign up!</p>
+            <div class="text-center col gap-2">
+                <button type="button" class="btn btn-primary me-2" (click)="registerToggle()">Register</button>
+                <button type="button" class="btn btn-info me-2">Learn More</button>
+            </div>
+    } @else {
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <app-register
+                    (cancelRegister)="cancelRegister($event)"
+                    ></app-register>
+                </div>
+            </div>
+        </div>
+    }
+</div>

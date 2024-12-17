@@ -1,30 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AccountService } from './_services/account.service';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, NavbarComponent, HomepageComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  http = inject(HttpClient);
+  private accountService = inject(AccountService);
   title = 'client';
-  users: any;
-
-  constructor(private ref: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      next: response => {
-        this.users = response;
-        this.ref.detectChanges();
-      },
-      error: error => console.log(error),
-      complete: () => console.log("response", this.users)
-    });
+    this.setCurrUser()
   }
+
+  setCurrUser () {
+    const userString = localStorage.getItem('user')
+    if(!userString) return;
+    const user = JSON.parse(userString);
+    this.accountService.currUser.set(user);
+  }
+
+
 }
