@@ -1,16 +1,19 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container">
-      <a class="navbar-brand">TrueVibes</a>
+      <a routerLink="/" class="navbar-brand">TrueVibes</a>
       @if (this.accServ.currUser()) {
         <ul class="navbar-nav me-auto mb-2 mb-md-0" >
           <li class="nav-item">
-            <a class="nav-link active">Matches</a>
+            <a routerLink="/members" routerLinkActive="active" class="nav-link">Matches</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active">Lists</a>
+            <a routerLink="/lists" routerLinkActive="active" class="nav-link">Lists</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active">Messages</a>
+            <a routerLink="/messages" routerLinkActive="active" class="nav-link">Messages</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/errors" routerLinkActive="active" class="nav-link">Errors</a>
           </li>
         </ul>
       }
@@ -31,7 +34,9 @@
         </form>
       } @else {
         <div class="dropdown" dropdown>
-          <a dropdownToggle class="dropdown-toggle text-light">Welcome User</a>
+          <a dropdownToggle class="dropdown-toggle text-light">
+            Welcome {{this.accServ.currUser()?.userName | titlecase }}
+          </a>
           <div *dropdownMenu class="dropdown-menu" u>
             <a class="dropdown-item">Edit Profile</a>
             <a class="dropdown-item" (click)="logout()">Logout</a>
