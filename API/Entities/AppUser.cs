@@ -2,11 +2,11 @@ using API.Extensions;
 
 namespace API.Entities
 {
+
     public class AppUser
     {
         // Entity only works with public
         public int Id { get; set; }
-
         public required string UserName { get; set; }
         public byte[] PasswordHash { get; set;} = [];
         public byte[] PasswordSalt { get; set;} = [];
@@ -20,7 +20,7 @@ namespace API.Entities
         public string? LookingFor {get; set;}
         public required string City {get; set;}
         public required string Country {get; set;}
-        public List<Photo> Photo {get; set;} = [];
+        public List<Photo> Photos { get; set; } = new List<Photo>();
 
         public int GetAge()
         {
