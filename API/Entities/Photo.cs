@@ -12,5 +12,5 @@ public class Photo
     public string? PublicId {get; set;}
 
     public int AppUserId {get; set; }
-    public AppUser AppUser {get; set;} = null!;
+    public virtual AppUser AppUser {get; set;} = null!;
 }

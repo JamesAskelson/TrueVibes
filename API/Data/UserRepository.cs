@@ -9,7 +9,8 @@ public class UserRepository(DataContext context) : IUserRepository
 {
     public async Task<AppUser?> GetUserByIdAsync(int id)
     {
-        return await context.Users.Include(x => x.Photos).FirstAsync(x => x.Id == id);
+        var user = await context.Users.Include(x => x.Photos).SingleOrDefaultAsync(x => x.Id == id);
+        return user;
     }
 
     public async Task<AppUser?> GetUserByUsernameAsync(string username)
