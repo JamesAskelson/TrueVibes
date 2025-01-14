@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { useAnimation } from '@angular/animations';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { useAnimation } from '@angular/animations';
 export class AccountService {
   private http = inject(HttpClient);
   currUser = signal<User | null>(null);
-  base = 'https://localhost:5001/api/';
+  base = environment.base;
 
   login(model: any) {
     return this.http.post<User>(this.base + 'account/login', model).pipe(
