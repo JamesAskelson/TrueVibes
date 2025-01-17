@@ -13,23 +13,23 @@ export class MembersService {
   base = environment.base;
 
   getMembers() {
-    return this.http.get<Member[]>(this.base + 'users', this.getHttpOptions())
+    return this.http.get<Member[]>(this.base + 'users')
   }
 
   getMemberByName(username: string){
-    return this.http.get<Member>(this.base + 'users/' + username, this.getHttpOptions())
+    return this.http.get<Member>(this.base + 'users/' + username)
   }
 
   getMemberById(id: number){
-    return this.http.get<Member>(this.base + 'user/' + id, this.getHttpOptions())
+    return this.http.get<Member>(this.base + 'user/' + id)
   }
 
-  getHttpOptions() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.accServe.currUser()?.token}`
-      })
-    }
-  }
+  // getHttpOptions() {
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${this.accServe.currUser()?.token}`
+  //     })
+  //   }
+  // }
 
 }
