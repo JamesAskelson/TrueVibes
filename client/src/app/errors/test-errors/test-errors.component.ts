@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-test-errors',
@@ -10,7 +11,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './test-errors.component.css'
 })
 export class TestErrorsComponent {
-  base = 'https://localhost:5001/api/';
+  base = environment.base;
   private http = inject(HttpClient);
   validationErrors: string[] = [];
 
