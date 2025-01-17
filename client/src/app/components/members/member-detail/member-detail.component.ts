@@ -9,11 +9,10 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { GalleryItem } from 'lightgallery/lg-utils';
 
 @Component({
-  selector: 'app-member-detail',
-  standalone: true,
-  imports: [AsyncPipe, TabsModule, LightgalleryModule, NgFor],
-  templateUrl: './member-detail.component.html',
-  styleUrl: './member-detail.component.css'
+    selector: 'app-member-detail',
+    imports: [AsyncPipe, TabsModule, LightgalleryModule, NgFor],
+    templateUrl: './member-detail.component.html',
+    styleUrl: './member-detail.component.css'
 })
 export class MemberDetailComponent implements OnInit{
   private memberServ = inject(MembersService);

@@ -4,11 +4,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-test-errors',
-  standalone: true,
-  imports: [RouterLink, RouterLinkActive],
-  templateUrl: './test-errors.component.html',
-  styleUrl: './test-errors.component.css'
+    selector: 'app-test-errors',
+    imports: [RouterLink, RouterLinkActive],
+    templateUrl: './test-errors.component.html',
+    styleUrl: './test-errors.component.css'
 })
 export class TestErrorsComponent {
   base = environment.base;
