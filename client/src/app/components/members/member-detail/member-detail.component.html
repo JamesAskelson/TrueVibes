@@ -50,7 +50,13 @@
                     <p>{{member.interests}}</p>
                 </tab>
                 <tab heading="Photos">
-                    <p>Photos</p>
+                    <lightgallery>
+                        @for(image of images; track image){
+                            <a href="{{image.src}}">
+                                <img src="{{image.thumb}}" />
+                            </a>
+                        }
+                    </lightgallery>
                 </tab>
                 <tab heading="Messages">
                     <p>Messages</p>
