@@ -24,6 +24,10 @@ export class MembersService {
     return this.http.get<Member>(this.base + 'user/' + id)
   }
 
+  updateMember(member: Member){
+    return this.http.put<Member>(this.base + 'users', member)
+  }
+
   // getHttpOptions() {
   //   return {
   //     headers: new HttpHeaders({
