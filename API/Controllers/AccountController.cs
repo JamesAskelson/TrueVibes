@@ -44,7 +44,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     [HttpPost("login")]
     public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
     {
-        var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDTO.Username.ToLower());
+        var user = await context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == loginDTO.Username.ToLower());
 
         if(user == null){
             return Unauthorized("User Not Found");
@@ -60,11 +60,13 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             }
         }
 
-        return new UserDTO
+        var loggedIn = new UserDTO
         {
             UserName = user.UserName,
-            Token = tokenService.CreateToken(user)
+            Token = tokenService.CreateToken(user),
+            photoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
         };
+        return loggedIn;
     }
 
     private async Task<bool> UserExists(string Username)

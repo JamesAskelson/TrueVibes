@@ -34,7 +34,8 @@
         </form>
       } @else {
         <div class="dropdown" dropdown>
-          <a dropdownToggle class="dropdown-toggle text-light">
+          <img src="{{accServ.currUser()?.photoUrl || './assets/user.png'}}" />
+          <a dropdownToggle class="dropdown-toggle text-light text-decoration-none" >
             Welcome {{this.accServ.currUser()?.userName | titlecase }}
           </a>
           <div *dropdownMenu class="dropdown-menu" u>

@@ -10,7 +10,7 @@ import { GalleryItem } from 'lightgallery/lg-utils';
 
 @Component({
     selector: 'app-member-detail',
-    imports: [AsyncPipe, TabsModule, LightgalleryModule, NgFor],
+    imports: [AsyncPipe, TabsModule, LightgalleryModule],
     templateUrl: './member-detail.component.html',
     styleUrl: './member-detail.component.css'
 })
@@ -30,10 +30,9 @@ export class MemberDetailComponent implements OnInit{
   ngOnInit(): void {
     this.member$.subscribe(member => {
       if (member) {
-        // Assuming `member.photos` is the array of photo URLs
         this.images = member.photo.map(photo => ({
-          src: photo.url, // Replace with actual property if different
-          thumb: photo.url, // You can use a thumbnail version of the image if available
+          src: photo.url,
+          thumb: photo.url,
         }));
       }
     });

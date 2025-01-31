@@ -1,0 +1,23 @@
+.custom-input {
+    width: 100%;
+    color: transparent; /* Hide the text */
+  }
+
+  .custom-input::file-selector-button {
+    padding: 10px 20px;
+    margin-top: 5px;
+    margin-left: 17%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .custom-input::file-selector-button:hover {
+    background-color: #0056b3;
+  }
+
+.nv-file-over {
+  border: dotted 3px red
+}

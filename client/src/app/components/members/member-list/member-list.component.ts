@@ -13,10 +13,15 @@ import { MemberCardComponent } from "../member-card/member-card.component";
     styleUrl: './member-list.component.css'
 })
 export class MemberListComponent {
-  private memberServ = inject(MembersService)
-  members$: Observable<Member[]> = this.memberServ.getMembers();
+  memberService = inject(MembersService);
 
-  constructor(private ref: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    if (this.memberService.members().length === 0) this.loadMembers();
+  }
+
+  loadMembers() {
+    this.memberService.getMembers()
+  }
 
   // ngOnInit(): void {
   //   this.loadMembers()

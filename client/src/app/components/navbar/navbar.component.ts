@@ -39,4 +39,7 @@ export class NavbarComponent {
     this.router.navigateByUrl('/')
   }
 
+  currentUser(){
+    console.log(this.accServ.currUser())
+  }
 }

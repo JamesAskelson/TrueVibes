@@ -1,4 +1,4 @@
-@if(member$ | async; as member) {
+@if(member) {
     <div class="row">
         <div class="col-4">
             <h1>Your Profile</h1>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="card-footer">
                         <button
-                        
+
                         form="editForm"
                         class="btn btn-success col-12"
                         [disabled]="!editForm.dirty">Save Changes</button>
@@ -88,7 +88,7 @@
                     </form>
                 </tab>
                 <tab heading="Edit Photos">
-                    Photo Edit will go here
+                    <app-photo-edit [member]="member" (memberChange)="onMemberChange($event)"></app-photo-edit>
                 </tab>
             </tabset>
         </div>
