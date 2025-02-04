@@ -5,14 +5,12 @@ import { MembersService } from '../../../_services/members.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+
 import { PhotoEditComponent } from "../photo-edit/photo-edit.component";
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-member-edit',
-  imports: [TabsModule, FormsModule, AsyncPipe, PhotoEditComponent],
+  imports: [TabsModule, FormsModule, PhotoEditComponent],
   templateUrl: './member-edit.component.html',
   styleUrl: './member-edit.component.css'
 })
@@ -27,11 +25,11 @@ export class MemberEditComponent implements OnInit {
   private accountServ = inject(AccountService);
   private memberServ = inject(MembersService);
   private toastr = inject(ToastrService);
+  private cdr = inject(ChangeDetectorRef);
 
-  // private memberSubject = new BehaviorSubject<Member | null>(null);
-  // member = signal<Member | undefined>(undefined);
   ngOnInit(): void {
     this.loadMember()
+
   }
 
   loadMember() {
@@ -41,6 +39,7 @@ export class MemberEditComponent implements OnInit {
       next: member =>
         {
           this.member = member;
+          this.cdr.markForCheck();
         }
 
     })

@@ -1,24 +1,86 @@
-<form #loginForm="ngForm" (ngSubmit)="register()" class="">
+<form [formGroup]="registerForm" (ngSubmit)="register()" class="">
     <h2 class="text-center text-primary">Sign up</h2>
     <hr>
-    <div class="form-floating mb-2">
-        <input
-        name="Username"
-        class="form-control me-2"
-        [(ngModel)]="model.Username"
-        placeholder="Username">
-        <label>Username</label>
+
+    <div class="mb-3">
+        <label style="margin-right: 10px;">I am a: </label>
+        <label class="form-check-label mx-1">
+            <input type="radio" class="form-check-input mx-1" value="male" formControlName="gender">Male
+        </label>
+        <label class="form-check-label mx-1">
+            <input type="radio" class="form-check-input mx-1" value="female" formControlName="gender">Female
+        </label>
     </div>
-    <div class="form-floating mb-2">
-        <input
-        name="Password"
-        class="form-control me-2"
-        [(ngModel)]="model.Password"
-        placeholder="Password" type="password">
-        <label class="text-">Password</label>
-    </div>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['Username'])"
+        [label]="'Username'"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['KnownAs'])"
+        [label]="'Known as'"
+    ></app-text-input>
+    <app-date-picker
+        [formControl]="$any(registerForm.controls['DateOfBirth'])"
+        [label]="'Date of birth (18+ only)'" [maxDate]="maxDate"
+    ></app-date-picker>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['City'])"
+        [label]="'City'"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['Country'])"
+        [label]="'Country'"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['Password'])"
+        [label]="'Password'"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="$any(registerForm.controls['confirmPassword'])"
+        [label]="'confirmPassword'"
+    ></app-text-input>
+
     <div class="d-flex w-50 m-auto justify-content-around mt-2">
         <button class="btn btn-success" type="submit">Register</button>
         <button class="btn btn-success" (click)="cancel()">Cancel</button>
     </div>
   </form>
+  <!-- <p>{{this.registerForm.value | json}}</p>
+  <p>{{this.registerForm.status | json}}</p> -->
+
+
+
+    <!-- Below is a Reactive form html basic setup that i just want to remember -->
+     <!-- <div class="form-floating mb-2">
+        <input
+        [class.is-invalid]="registerForm.get('Username')?.errors && registerForm.get('Username')?.touched"
+        type="text"
+        class="form-control me-2"
+        formControlName="Username"
+        placeholder="Username">
+        <label>Username</label>
+        <div class="invalid-feedback text-start">Please enter a username</div>
+    </div>
+    <div class="form-floating mb-2">
+        <input
+        [class.is-invalid]="registerForm.get('Password')?.errors && registerForm.get('Password')?.touched"
+        type="password"
+        class="form-control me-2"
+        formControlName="Password"
+        placeholder="Password" >
+        <label>Password</label>
+        <div *ngIf="registerForm.get('Password')?.hasError('required')" class="invalid-feedback text-start">Please enter a valid password</div>
+        <div *ngIf="registerForm.get('Password')?.hasError('minlength')" class="invalid-feedback text-start">Passwords must be a minimum of 4 characters.</div>
+        <div *ngIf="registerForm.get('Password')?.hasError('maxlength')" class="invalid-feedback text-start">Passwords must have a maximum of 12 characters.</div>
+    </div>
+    <div class="form-floating mb-2">
+        <input
+        [class.is-invalid]="registerForm.get('confirmPassword')?.errors && registerForm.get('confirmPassword')?.touched"
+        type="password"
+        class="form-control me-2"
+        formControlName="confirmPassword"
+        placeholder="Confirm Password" >
+        <label>Password</label>
+        <div *ngIf="registerForm.get('confirmPassword')?.hasError('required')" class="invalid-feedback text-start">Please enter the password.</div>
+        <div *ngIf="registerForm.get('confirmPassword')?.hasError('isMatching')" class="invalid-feedback text-start">Passwords must match.</div>
+    </div> -->

@@ -20,7 +20,7 @@ export class NavbarComponent {
   model: any = {};
 
 
-  constructor(private ref: ChangeDetectorRef) {
+  constructor() {
     console.log(this.accServ.currUser())
   }
 
@@ -37,9 +37,5 @@ export class NavbarComponent {
   logout() {
     this.accServ.logout();
     this.router.navigateByUrl('/')
-  }
-
-  currentUser(){
-    console.log(this.accServ.currUser())
   }
 }

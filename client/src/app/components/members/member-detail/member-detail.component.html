@@ -1,4 +1,4 @@
-@if(member$ | async; as member) {
+@if(member) {
     <div class="row">
         <div class="col-4">
             <div class="card">
@@ -49,14 +49,15 @@
                     <h4>Interests</h4>
                     <p>{{member.interests}}</p>
                 </tab>
-                <tab heading="Photos">
-                    <lightgallery>
-                        @for(image of images; track image){
-                            <a href="{{image.src}}">
-                                <img src="{{image.thumb}}" />
-                            </a>
-                        }
-                    </lightgallery>
+                <tab heading="Photos" #photoTab="tab">
+                    @if (photoTab.active) {
+                        <gallery
+                            [items]="images"
+                            [itemAutosize]="true"
+                            class="gallery"
+                    ></gallery>
+                    }
+
                 </tab>
                 <tab heading="Messages">
                     <p>Messages</p>
