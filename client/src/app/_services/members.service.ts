@@ -54,18 +54,17 @@ export class MembersService {
     )
   }
 
-  deletePhoto(photo: Photo) {
-    return this.http.delete(this.base + 'users/delete-photo/' + photo.id)
-    // .pipe(
-    //   tap(() => {
-    //     this.members.update(members => members.map(m => {
-    //       if (m.photo.includes(photo)) {
-    //         m.photo = m.photo.filter(x => x.id == photo.id)
-    //       }
-    //       return m;
-    //     }))
-    //   })
-    // )
+deletePhoto(photo: Photo) {
+    return this.http.delete(this.base + 'users/delete-photo/' + photo.id).pipe(
+      tap(() => {
+        this.members.update(members => members.map(m => {
+          if (m.photo.some(x => x.id === photo.id)) {
+            m.photo = m.photo.filter(x => x.id !== photo.id);
+          }
+          return m;
+        }));
+      })
+    );
   }
 
   // getHttpOptions() {

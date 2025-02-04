@@ -2,6 +2,8 @@ using System;
 using API.DTO;
 using API.Entities;
 using AutoMapper;
+using AutoMapper.Execution;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 
 namespace API.Helpers;
@@ -17,5 +19,7 @@ public class AutoMapProfiles : Profile
             .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photos)); // Explicitly map Photos
         CreateMap<Photo, PhotoDTO>();
         CreateMap<MemberUpdateDTO, AppUser>();
+        CreateMap<RegisterDTO, AppUser>();
+        CreateMap<string, DateOnly>().ConvertUsing(s => DateOnly.Parse(s));
     }
 }
