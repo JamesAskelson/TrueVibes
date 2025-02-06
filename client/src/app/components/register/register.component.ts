@@ -1,10 +1,9 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, output } from '@angular/core';
 import { AccountService } from '../../_services/account.service';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { JsonPipe, NgIf } from '@angular/common';
 import { TextInputComponent } from "../../_forms/text-input/text-input.component";
 import { DatePickerComponent } from "../../_forms/date-picker/date-picker.component";
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-register',
@@ -13,12 +12,14 @@ import { DatePickerComponent } from "../../_forms/date-picker/date-picker.compon
     styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
-
+  private cdr = inject(ChangeDetectorRef)
+  private router = inject(Router);
   accServ = inject(AccountService);
   cancelRegister = output<boolean>();
   model: any = {};
   registerForm: FormGroup = new FormGroup({})
   maxDate = new Date();
+  validationErrors: string[] | undefined
 
   ngOnInit(): void {
     this.initializeForm()
@@ -49,18 +50,24 @@ export class RegisterComponent implements OnInit {
 
 
   register(){
-    console.log(this.registerForm.value)
-    // this.accServ.register(this.model).subscribe({
-    //   next: response => {
-    //     console.log(response);
-    //     this.cancel();
-    //   },
-    //   error: error => this.toastr.error(error.error)
-    // })
+    const dob = this.getDateOnly(this.registerForm.get('DateOfBirth')?.value);
+    this.registerForm.patchValue({DateOfBirth: dob})
+    this.accServ.register(this.registerForm.value).subscribe({
+      next: _ => this.router.navigateByUrl('/members'),
+      error: error => {
+        this.validationErrors = error,
+        this.cdr.markForCheck()
+      }
+    })
   }
 
 
   cancel(){
     this.cancelRegister.emit(false)
+  }
+
+  private getDateOnly(dob: string | undefined) {
+    if (!dob) return;
+    return new Date(dob).toISOString().slice(0, 10);
   }
 }
