@@ -40,8 +40,18 @@
         [label]="'confirmPassword'"
     ></app-text-input>
 
+    @if(validationErrors){
+        <div class="alert alert-danger text-start">
+            <ul>
+                @for (error of validationErrors; track $index) {
+                    <li>{{error}}</li>
+                }
+            </ul>
+        </div>
+    }
+
     <div class="d-flex w-50 m-auto justify-content-around mt-2">
-        <button class="btn btn-success" type="submit">Register</button>
+        <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Register</button>
         <button class="btn btn-success" (click)="cancel()">Cancel</button>
     </div>
   </form>

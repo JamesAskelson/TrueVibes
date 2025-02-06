@@ -42,6 +42,19 @@ export class PhotoEditComponent {
       const updatedMember = {...this.member()}
       updatedMember.photo.push(photo);
       this.memberChange.emit(updatedMember);
+      if(photo.isMain){
+        const user = this.accServ.currUser();
+        if(user) {
+          user.photoUrl = photo.url;
+          this.accServ.setCurrentUser(user);
+        }
+        updatedMember.photoUrl = photo.url;
+        updatedMember.photo.forEach(p => {
+          if(p.isMain) p.isMain = false;
+          if(p.id === photo.id) p.isMain = true;
+        })
+        this.memberChange.emit(updatedMember);
+      }
     }
   }
 
@@ -78,6 +91,7 @@ export class PhotoEditComponent {
         const updatedMember = {...this.member()}
         updatedMember.photo = updatedMember.photo.filter(x => x.id !== photo.id)
         this.memberChange.emit(updatedMember)
+        if (photo.isMain) {}
       }
     })
   }
