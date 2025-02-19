@@ -1,5 +1,6 @@
 using System;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +19,9 @@ public class UserRepository(DataContext context) : IUserRepository
         return await context.Users.Include(x => x.Photos).SingleOrDefaultAsync(x => x.UserName == username);
     }
 
-    public async Task<IEnumerable<AppUser>> GetUsersAsync()
+    public IQueryable<AppUser> GetUsers()
     {
-        return await context.Users.Include(x => x.Photos).ToListAsync();
+        return context.Users.Include(x => x.Photos);
     }
 
     public async Task<bool> SaveAllAsync()
