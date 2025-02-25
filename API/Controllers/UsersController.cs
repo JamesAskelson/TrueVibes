@@ -19,7 +19,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     {
         var users = userRepository.GetUsers();
         var queriedUsers = await PagedList<AppUser>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
-        var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(users);
+        var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(queriedUsers);
         Response.AddPaginationHeader(queriedUsers);
         Console.WriteLine(mappedUsers);
         return Ok(mappedUsers);
