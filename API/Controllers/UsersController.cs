@@ -18,10 +18,20 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
     {
         var users = userRepository.GetUsers();
+        userParams.CurrentUsername = User.GetUsername();
+        users = users.Where(x => x.UserName.ToLower() != userParams.CurrentUsername);
+
+        if(userParams.Gender != null) {
+            users = users.Where(x => x.Gender == userParams.Gender);
+        }
+
+        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge-1));
+        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
+        users = users.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+
         var queriedUsers = await PagedList<AppUser>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(queriedUsers);
         Response.AddPaginationHeader(queriedUsers);
-        Console.WriteLine(mappedUsers);
         return Ok(mappedUsers);
     }
 

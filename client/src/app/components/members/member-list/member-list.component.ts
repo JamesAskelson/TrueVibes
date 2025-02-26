@@ -4,29 +4,38 @@ import { Member } from '../../../_models/member';
 import { Observable } from 'rxjs';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { MemberCardComponent } from "../member-card/member-card.component";
+import { UserParams } from '../../../_models/userParams';
+import { AccountService } from '../../../_services/account.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-member-list',
-    imports: [MemberCardComponent, PaginationModule],
+    imports: [MemberCardComponent, PaginationModule, FormsModule],
     templateUrl: './member-list.component.html',
     styleUrl: './member-list.component.css'
 })
 export class MemberListComponent {
+  private accountServ = inject(AccountService);
   memberService = inject(MembersService);
-  pageNumber = 1;
-  pageSize = 5;
+  userParams = new UserParams(this.accountServ.currUser())
+  genderList = [{value: 'male', display: 'Males'}, {value: 'female', display: 'Females'}]
 
   ngOnInit(): void {
     if (!this.memberService.paginatedResult()) this.loadMembers();
   }
 
   loadMembers() {
-    this.memberService.getMembers(this.pageNumber, this.pageSize)
+    this.memberService.getMembers(this.userParams)
+  }
+
+  resetFilters() {
+    this.userParams = new UserParams(this.accountServ.currUser())
+    this.loadMembers();
   }
 
   pageChanged(event: any) {
-    if (this.pageNumber !== event.page) {
-      this.pageNumber = event.page;
+    if (this.userParams.pageNumber !== event.page) {
+      this.userParams.pageNumber = event.page;
       this.loadMembers()
     }
   }
