@@ -28,6 +28,11 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge-1));
         var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
         users = users.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+        users = userParams.OrderBy switch
+        {
+            "created" => users.OrderByDescending(x => x.Created),
+            _ => users.OrderByDescending(x => x.LastActive)
+        };
 
         var queriedUsers = await PagedList<AppUser>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(queriedUsers);
@@ -46,7 +51,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         return Ok(mappedUser);
     }
 
-        [HttpGet("{username}")]
+     [HttpGet("{username}")]
     public async Task<ActionResult<MemberDTO>> GetUserByName(string username)
     {
         var user = await userRepository.GetUserByUsernameAsync(username);
