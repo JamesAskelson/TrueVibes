@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTO;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -14,12 +15,28 @@ namespace API.Controllers;
 public class UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
+    public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
     {
-        var users = await userRepository.GetUsersAsync();
+        var users = userRepository.GetUsers();
+        userParams.CurrentUsername = User.GetUsername();
+        users = users.Where(x => x.UserName.ToLower() != userParams.CurrentUsername);
 
-        var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(users);
+        if(userParams.Gender != null) {
+            users = users.Where(x => x.Gender == userParams.Gender);
+        }
 
+        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge-1));
+        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
+        users = users.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+        users = userParams.OrderBy switch
+        {
+            "created" => users.OrderByDescending(x => x.Created),
+            _ => users.OrderByDescending(x => x.LastActive)
+        };
+
+        var queriedUsers = await PagedList<AppUser>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
+        var mappedUsers = mapper.Map<IEnumerable<MemberDTO>>(queriedUsers);
+        Response.AddPaginationHeader(queriedUsers);
         return Ok(mappedUsers);
     }
 
@@ -34,7 +51,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         return Ok(mappedUser);
     }
 
-        [HttpGet("{username}")]
+     [HttpGet("{username}")]
     public async Task<ActionResult<MemberDTO>> GetUserByName(string username)
     {
         var user = await userRepository.GetUserByUsernameAsync(username);
@@ -42,6 +59,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         var mappedUser = mapper.Map<MemberDTO>(user);
 
         if(user == null) return NotFound();
+
         return Ok(mappedUser);
     }
 

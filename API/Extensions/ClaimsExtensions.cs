@@ -10,4 +10,10 @@ public static class ClaimsExtensions
             ?? throw new Exception("No username found");
         return username;
     }
+
+    public static int GetId(this ClaimsPrincipal user){
+        var id = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new Exception("No id found"));
+        return id;
+    }
 }
