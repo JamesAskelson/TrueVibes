@@ -4,12 +4,14 @@ import { User } from '../_models/user';
 import { map } from 'rxjs';
 import { useAnimation } from '@angular/animations';
 import { environment } from '../../environments/environment';
+import { LikesService } from './likes.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   private http = inject(HttpClient);
+  private likeServ = inject(LikesService)
   currUser = signal<User | null>(null);
   base = environment.base;
 
@@ -38,6 +40,7 @@ export class AccountService {
   setCurrentUser(user: User){
     localStorage.setItem('user', JSON.stringify(user));
     this.currUser.set(user);
+    this.likeServ.getLikeIds();
   }
 
   logout() {
