@@ -34,7 +34,7 @@ export class MembersService {
     params = params.append('minAge', this.userParams().minAge)
     params = params.append('gender', this.userParams().gender)
     params = params.append('orderBy', this.userParams().orderBy)
-    
+
     return this.http.get<Member[]>(this.base + 'users', {observe: "response", params}).subscribe({
       next: response => {
         this.setPaginatedResponse(response)
