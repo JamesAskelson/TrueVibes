@@ -6,7 +6,7 @@ namespace API.Extensions;
 public static class ClaimsExtensions
 {
     public static string GetUsername(this ClaimsPrincipal user){
-        var username = user.FindFirstValue(ClaimTypes.NameIdentifier)
+        var username = user.FindFirstValue(ClaimTypes.Name)
             ?? throw new Exception("No username found");
         return username;
     }

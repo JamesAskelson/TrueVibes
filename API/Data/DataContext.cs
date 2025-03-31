@@ -8,6 +8,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<AppUser> Users { get; set; }
     public DbSet<Photo> Photos { get; set;}
     public DbSet<UserLike> Likes { get; set;}
+    public DbSet<Message> Messages { get; set;}
 
 //Code below makes models on creation much easier to grasp and read
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,5 +29,15 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
             .WithMany(l => l.LikedbyUser)
             .HasForeignKey(s => s.TargetUserId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(s => s.Recipient)
+            .WithMany(l => l.MessagesReceived)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(s => s.Sender)
+            .WithMany(l => l.MessagesSent)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

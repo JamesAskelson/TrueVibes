@@ -7,9 +7,10 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { GalleryModule, GalleryItem, ImageItem } from 'ng-gallery';
 import { TimeagoModule } from 'ngx-timeago';
 import { DatePipe } from '@angular/common';
+import { MemberMessagesComponent } from "../member-messages/member-messages.component";
 @Component({
     selector: 'app-member-detail',
-    imports: [TabsModule, LightgalleryModule, GalleryModule, TimeagoModule, DatePipe],
+    imports: [TabsModule, LightgalleryModule, GalleryModule, TimeagoModule, DatePipe, MemberMessagesComponent],
     templateUrl: './member-detail.component.html',
     styleUrl: './member-detail.component.css'
 })
