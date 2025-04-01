@@ -1,10 +1,11 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { MessageService } from '../../../_services/message.service';
 import { Message } from '../../../_models/message';
+import { TimeagoModule, TimeagoPipe } from 'ngx-timeago';
 
 @Component({
   selector: 'app-memeber-messages',
-  imports: [],
+  imports: [TimeagoModule],
   templateUrl: './member-messages.component.html',
   styleUrl: './member-messages.component.css'
 })
