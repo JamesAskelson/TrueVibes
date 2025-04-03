@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MessageService } from '../../_services/message.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TimeagoModule, TimeagoPipe } from 'ngx-timeago';
@@ -14,10 +14,12 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
     styleUrl: './messages.component.css'
 })
 export class MessagesComponent implements OnInit {
+    private cdr = inject(ChangeDetectorRef)
     messageServ = inject(MessageService)
     container = "Inbox";
     pageNumber = 1;
     pageSize = 5;
+    isOutbox = this.container === 'Outbox';
 
     ngOnInit(): void {
         this.loadMessages()
@@ -26,6 +28,21 @@ export class MessagesComponent implements OnInit {
     loadMessages() {
         console.log(this.container)
         this.messageServ.getMessages(this.pageNumber, this.pageSize, this.container)
+    }
+
+    deleteMessage(id: number) {
+        this.messageServ.deleteMessage(id).subscribe({
+            next: _ => {
+                this.messageServ.paginatedResult.update(prev => {
+                    if(prev && prev.items) {
+                        prev.items.splice(prev.items.findIndex(item => item.id === id), 1);
+                        return prev;
+                    }
+                    return prev;
+                })
+                this.cdr.markForCheck()
+            }
+        })
     }
 
     getRoute(message: Message) {

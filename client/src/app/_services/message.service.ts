@@ -31,6 +31,14 @@ getMessageThread(username: string) {
   return this.http.get<Message[]>(this.base + 'messages/thread/' + username)
 }
 
+sendMessage(username: string, content: string) {
+  return this.http.post<Message>(this.base + 'messages', {recipientUsername: username, content})
+}
+
+deleteMessage(id: number) {
+  return this.http.delete(this.base + 'messages/' + id)
+}
+
 ////////////////////////////////////////////////////
 // Pagination Functions
 ////////////////////////////////////////////////////

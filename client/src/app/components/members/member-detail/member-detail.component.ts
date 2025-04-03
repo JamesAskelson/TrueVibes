@@ -17,18 +17,38 @@ import { MessageService } from '../../../_services/message.service';
     styleUrl: './member-detail.component.css'
 })
 export class MemberDetailComponent implements OnInit{
-  @ViewChild('memberTabs') memberTabs?: TabsetComponent;
+  //staic + resolver + code in init allows for routing from membercard message button
+  @ViewChild('memberTabs', {static: true}) memberTabs?: TabsetComponent;
   private memberServ = inject(MembersService);
   private messageServ = inject(MessageService);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
-  member?: Member;
+  member: Member = {} as Member;
   images: GalleryItem[] = [];
   activeTab?: TabDirective;
   messages: Message[] = [];
 
   ngOnInit(): void {
-    this.loadMember()
+    // OLD CODE
+    // this.loadMember()
+    this.route.data.subscribe({
+      next: data => {
+        this.member = data['member'];
+        this.member && this.member.photo.map(p => {
+          this.images.push(new ImageItem({src: p.url, thumb: p.url}))
+        })
+        this.cdr.markForCheck()
+      }
+    })
+    this.route.queryParams.subscribe({
+      next: params => {
+        params['tab'] && this.selectTab(params['tab'])
+      }
+    })
+  }
+
+  onUpdateMessages(event: Message) {
+    this.messages.push(event);
   }
 
   selectTab(heading: string) {
@@ -53,17 +73,18 @@ export class MemberDetailComponent implements OnInit{
     }
   }
 
-  loadMember() {
-    const username = this.route.snapshot.paramMap.get('username');
-    if (!username) return;
-    this.memberServ.getMemberByName(username).subscribe({
-      next: member => {
-        this.member = member;
-        member.photo.map(p => {
-          this.images.push(new ImageItem({src: p.url, thumb: p.url}))
-        })
-        this.cdr.markForCheck()
-      }
-    })
-  }
+// OLD CODE
+  // loadMember() {
+  //   const username = this.route.snapshot.paramMap.get('username');
+  //   if (!username) return;
+  //   this.memberServ.getMemberByName(username).subscribe({
+  //     next: member => {
+  //       this.member = member;
+  //       member.photo.map(p => {
+  //         this.images.push(new ImageItem({src: p.url, thumb: p.url}))
+  //       })
+  //       this.cdr.markForCheck()
+  //     }
+  //   })
+  // }
 }
