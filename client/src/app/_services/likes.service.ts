@@ -34,6 +34,9 @@ export class LikesService {
     })
   }
 
+////////////////////////////////////////////////////
+// Pagination Functions
+////////////////////////////////////////////////////
 
   private setPaginatedResponse(response: HttpResponse<Member[]>) {
     this.paginatedResult.set({
