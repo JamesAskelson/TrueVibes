@@ -10,6 +10,7 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { MemberEditComponent } from './components/members/member-edit/member-edit.component';
 import { preventDiscardedChangesGuard } from './_guards/prevent-discarded-changes.guard';
+import { memberDetailedResolver } from './_resolver/member-detailed.resolver';
 
 export const routes: Routes = [
     { path: '', component: HomepageComponent },
@@ -19,7 +20,8 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: 'members', component: MemberListComponent, canActivate: [authGuard] },
-            { path: 'members/:username', component: MemberDetailComponent },
+            { path: 'members/:username', component: MemberDetailComponent,
+                resolve: { member: memberDetailedResolver } },
             { path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventDiscardedChangesGuard] },
             { path: 'lists', component: ListsComponent },
             { path: 'messages', component: MessagesComponent },
