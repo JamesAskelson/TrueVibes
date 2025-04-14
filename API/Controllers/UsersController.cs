@@ -19,7 +19,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     {
         var users = userRepository.GetUsers();
         userParams.CurrentUsername = User.GetUsername();
-        users = users.Where(x => x.UserName.ToLower() != userParams.CurrentUsername);
+        users = users.Where(x => x.NormalizedUserName != userParams.CurrentUsername);
 
         if(userParams.Gender != null) {
             users = users.Where(x => x.Gender == userParams.Gender);
@@ -40,22 +40,10 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         return Ok(mappedUsers);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<MemberDTO>> GetUserById(int id)
-    {
-        var user = await userRepository.GetUserByIdAsync(id);
-
-        var mappedUser = mapper.Map<MemberDTO>(user);
-
-        if(user == null) return NotFound();
-        return Ok(mappedUser);
-    }
-
-     [HttpGet("{username}")]
+    [HttpGet("{username}")]
     public async Task<ActionResult<MemberDTO>> GetUserByName(string username)
     {
         var user = await userRepository.GetUserByUsernameAsync(username);
-
         var mappedUser = mapper.Map<MemberDTO>(user);
 
         if(user == null) return NotFound();
@@ -144,4 +132,14 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         return BadRequest("Issue deleting photo");
 
     }
+
+    // [HttpGet("{id:int}")]
+    // public async Task<ActionResult<MemberDTO>> GetUserById(int id)
+    // {
+    //     var user = await userRepository.GetUserByIdAsync(id);
+    //     var mappedUser = mapper.Map<MemberDTO>(user);
+
+    //     if(user == null) return NotFound();
+    //     return Ok(mappedUser);
+    // }
 }

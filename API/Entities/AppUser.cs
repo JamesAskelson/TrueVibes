@@ -1,15 +1,13 @@
 using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities
 {
 
-    public class AppUser
+    public class AppUser : IdentityUser<int>
     {
         // Entity only works with public
-        public int Id { get; set; }
-        public required string UserName { get; set; }
-        public byte[] PasswordHash { get; set;} = [];
-        public byte[] PasswordSalt { get; set;} = [];
+        // ASPNET IdentityUser takes care of the id, username, and password hashing/salting
         public DateOnly DateOfBirth { get; set;}
         public required string KnownAs { get; set;}
         public DateTime Created { get; set;} = DateTime.UtcNow;
@@ -25,6 +23,7 @@ namespace API.Entities
         public List<UserLike> LikedUsers { get; set; } = [];
         public List<Message> MessagesSent { get; set;} = [];
         public List<Message> MessagesReceived { get; set; } = [];
+        public ICollection<AppUserRole> UserRoles { get; set;} = [];
 
         public int GetAge()
         {
