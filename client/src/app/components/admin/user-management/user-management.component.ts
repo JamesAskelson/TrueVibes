@@ -19,18 +19,31 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsersWithRoles();
-    console.log(this.users)
   }
 
-  openRolesModal() {
+  openRolesModal(user: User) {
     const initialState: ModalOptions = {
       class: "modal-lg",
       initialState: {
         title: 'User roles',
-        list: ['Admin', 'Moderator', 'Member']
+        username: user.username,
+        selectedRoles: [...user.roles],
+        availableRoles: ['Admin', 'Moderator', 'Member'],
+        users: this.users,
+        rolesUpdated: false
       }
     }
     this.bsModalRef = this.modalServ.show(RolesModalComponent, initialState)
+    this.bsModalRef.onHide?.subscribe({
+      next: () => {
+        if(this.bsModalRef.content && this.bsModalRef.content.rolesUpdated) {
+          const selectedRoles = this.bsModalRef.content.selectedRoles;
+          this.adminServ.updateUserRoles(user.username, selectedRoles).subscribe({
+            next: roles => user.roles = roles
+          })
+        }
+      }
+    })
   }
 
   getUsersWithRoles() {
