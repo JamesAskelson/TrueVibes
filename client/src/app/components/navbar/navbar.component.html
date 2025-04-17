@@ -39,7 +39,7 @@
         <div class="dropdown" dropdown>
           <img src="{{accServ.currUser()?.photoUrl || './assets/user.png'}}" />
           <a dropdownToggle class="dropdown-toggle text-light text-decoration-none" >
-            Welcome {{this.accServ.currUser()?.username | titlecase }}
+            Welcome {{this.accServ.currUser()?.userName | titlecase }}
           </a>
           <div *dropdownMenu class="dropdown-menu" u>
             <a routerLink="/member/edit" routerLinkActive="true" class="dropdown-item">Edit Profile</a>
